@@ -1,0 +1,43 @@
+@url=http://localhost:8080
+
+GET {{url}}/
+
+### Register ###
+POST {{url}}/signup
+Content-Type: application/json
+
+{
+  "email": "sing@dev.com",
+  "password": "12345678"
+}
+
+### Login ###
+# @name auth
+POST {{url}}/signin
+Content-Type: application/json
+
+{
+  "email": "sing@dev.com",
+  "password": "12345678"
+}
+### Get Token ###
+@token = {{auth.response.body.$.token}}
+
+
+### Get User ###
+GET {{url}}/users
+Authorization: Bearer {{token}}
+
+### Get User By Id ###
+GET {{url}}/users/64722b2c9c2529b840ee5f3e
+Authorization: Bearer {{token}}
+
+### Update User ###
+PUT {{url}}/users/64722b2c9c2529b840ee5f3e
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "email": "sing2@dev.com",
+  "password": "12345678"
+}

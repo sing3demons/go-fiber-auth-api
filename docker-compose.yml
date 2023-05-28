@@ -1,0 +1,43 @@
+version: "3.9"
+services:
+  db:
+    image: mongo
+    container_name: mongo
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=user
+      - MONGO_INITDB_ROOT_PASSWORD=password
+
+    ports:
+      - 27017:27017
+
+  # webapi:
+    # image: go-fiber-mongo:0.0.1
+    # container_name: webapi
+    # build: .
+    # ports:
+    #   - 8080:8080
+    # environment:
+    #   - PORT=8080
+    #   - DATABASE_USER=user
+    #   - DATABASE_PASS=password
+    #   - DATABASE_HOST=db
+    #   - DATABASE_PORT=27017
+    #   - DATABASE_NAME=mydb
+    #   - JWT_SECRET_KEY=secret
+    # restart: always
+    # depends_on:
+    #   - db
+    # links:
+    #   - "db:db"
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=db
+      - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=user
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=password
