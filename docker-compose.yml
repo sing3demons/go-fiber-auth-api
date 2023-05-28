@@ -11,25 +11,25 @@ services:
     ports:
       - 27017:27017
 
-  # webapi:
-    # image: go-fiber-mongo:0.0.1
-    # container_name: webapi
-    # build: .
-    # ports:
-    #   - 8080:8080
-    # environment:
-    #   - PORT=8080
-    #   - DATABASE_USER=user
-    #   - DATABASE_PASS=password
-    #   - DATABASE_HOST=db
-    #   - DATABASE_PORT=27017
-    #   - DATABASE_NAME=mydb
-    #   - JWT_SECRET_KEY=secret
-    # restart: always
-    # depends_on:
-    #   - db
-    # links:
-    #   - "db:db"
+  webapi:
+    image: go-fiber-mongo:0.0.1
+    container_name: webapi
+    build: .
+    ports:
+      - 8080:8080
+    environment:
+      - PORT=8080
+      - DATABASE_USER=user
+      - DATABASE_PASS=password
+      - DATABASE_HOST=db
+      - DATABASE_PORT=27017
+      - DATABASE_NAME=mydb
+      - JWT_SECRET_KEY=secret
+    restart: always
+    depends_on:
+      - db
+    links:
+      - "db:db"
   mongo-express:
     image: mongo-express
     container_name: mongo-express
