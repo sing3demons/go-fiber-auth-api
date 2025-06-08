@@ -8,6 +8,7 @@ import (
 	"github.com/sing3demons/go-fiber-auth-api/db"
 	"github.com/sing3demons/go-fiber-auth-api/repository"
 	routes "github.com/sing3demons/go-fiber-auth-api/router"
+	"github.com/sing3demons/go-fiber-auth-api/security"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -33,7 +34,7 @@ func main() {
 	})
 
 	usersRepo := repository.NewUsersRepository(conn)
-	authController := controllers.NewAuthController(usersRepo)
+	authController := controllers.NewAuthController(usersRepo, security.NewSecurityToken())
 	authRoutes := routes.NewAuthRoutes(authController)
 	authRoutes.Install(app)
 

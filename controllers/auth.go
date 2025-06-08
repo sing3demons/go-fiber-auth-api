@@ -30,10 +30,11 @@ type AuthController interface {
 
 type authController struct {
 	usersRepo repository.UsersRepository
+	security.SecurityToken
 }
 
-func NewAuthController(usersRepo repository.UsersRepository) AuthController {
-	return &authController{usersRepo}
+func NewAuthController(usersRepo repository.UsersRepository, security security.SecurityToken) AuthController {
+	return &authController{usersRepo, security}
 }
 
 func (c *authController) SignUp(ctx *fiber.Ctx) error {
@@ -65,8 +66,6 @@ func (c *authController) SignUp(ctx *fiber.Ctx) error {
 			Status(http.StatusBadRequest).
 			JSON(util.NewJError(util.ErrEmailAlreadyExists))
 	}
-
-	fmt.Println(newUser.Password)
 
 	if strings.TrimSpace(newUser.Password) == "" {
 		return ctx.
@@ -117,7 +116,7 @@ func (c *authController) SignIn(ctx *fiber.Ctx) error {
 			Status(http.StatusUnauthorized).
 			JSON(util.NewJError(util.ErrInvalidCredentials))
 	}
-	token, err := security.NewToken(user.Id.Hex())
+	token, err := c.SecurityToken.NewToken(user.Id.Hex())
 	if err != nil {
 		log.Printf("%s signin failed: %v\n", input.Email, err.Error())
 		return ctx.

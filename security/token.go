@@ -15,7 +15,16 @@ var (
 	JwtSigningMethod = jwt.SigningMethodHS256.Name
 )
 
-func NewToken(userId string) (string, error) {
+type SecurityToken interface {
+	NewToken(userId string) (string, error)
+}
+type securityToken struct{}
+
+func NewSecurityToken() SecurityToken {
+	return &securityToken{}
+}
+
+func (securityToken) NewToken(userId string) (string, error) {
 	claims := jwt.RegisteredClaims{
 		ID:        userId,
 		Subject:   userId,
@@ -43,7 +52,6 @@ func ParseToken(tokenString string) (*jwt.RegisteredClaims, error) {
 		return nil, err
 	}
 
-	
 	var ok bool
 	claims, ok = token.Claims.(*jwt.RegisteredClaims)
 	if !ok || !token.Valid {
